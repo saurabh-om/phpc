@@ -206,6 +206,29 @@ p{ margin:0 0 1.1em; }
 .cat-card__label .k{ font-family:var(--display); letter-spacing:.2em; text-transform:uppercase; font-size:.66rem; color:var(--gold-soft); display:block; margin-bottom:4px; }
 .cat-card__label .t{ font-family:var(--serif); font-size:1.5rem; }
 
+/* ---------- Slider (home: cluster moments) ---------- */
+.slider{ position:relative; max-width:1000px; margin:48px auto 0; }
+.slider__track{ list-style:none; margin:0; padding:0; position:relative; aspect-ratio:16/9; border-radius:4px; overflow:hidden; box-shadow:var(--shadow-md); background:var(--cream-2); }
+.slide{ position:absolute; inset:0; opacity:0; transition:opacity .9s ease; }
+.slide.is-active{ opacity:1; }
+.slide img{ width:100%; height:100%; object-fit:cover; }
+/* graceful no-JS fallback: stack first slide visible */
+.slider:not(.is-ready) .slide:first-child{ opacity:1; }
+.slider__arrow{ position:absolute; top:50%; transform:translateY(-50%); z-index:3;
+  width:46px; height:46px; border-radius:50%; border:0; cursor:pointer;
+  background:rgba(255,255,255,.82); color:var(--ink); display:flex; align-items:center; justify-content:center;
+  box-shadow:var(--shadow-sm); transition:background .25s ease, transform .25s ease; }
+.slider__arrow:hover{ background:#fff; }
+.slider__arrow svg{ width:22px; height:22px; }
+.slider__arrow--prev{ left:14px; }
+.slider__arrow--next{ right:14px; }
+.slider__arrow--prev:hover{ transform:translateY(-50%) translateX(-2px); }
+.slider__arrow--next:hover{ transform:translateY(-50%) translateX(2px); }
+.slider__dots{ display:flex; gap:9px; justify-content:center; margin-top:20px; }
+.slider__dots button{ width:8px; height:8px; padding:0; border-radius:50%; border:0; cursor:pointer;
+  background:var(--line-strong); transition:background .25s ease, transform .25s ease; }
+.slider__dots button.is-active{ background:var(--gold); transform:scale(1.35); }
+
 /* ---------- Collections ---------- */
 .catnav{ position:sticky; top:72px; z-index:40; background:rgba(251,247,240,.95); backdrop-filter:blur(8px); border-block:1px solid var(--line); }
 .catnav ul{ list-style:none; margin:0; padding:0; display:flex; gap:6px; flex-wrap:wrap; justify-content:center; padding-block:12px; }

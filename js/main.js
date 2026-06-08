@@ -72,6 +72,53 @@
     sections.forEach(function (s) { spy.observe(s); });
   }
 
+  /* --- Slider (cluster moments) --- */
+  var slider = doc.querySelector("[data-slider]");
+  if (slider) {
+    var slides = [].slice.call(slider.querySelectorAll(".slide"));
+    var dotsWrap = slider.querySelector(".slider__dots");
+    var prev = slider.querySelector(".slider__arrow--prev");
+    var next = slider.querySelector(".slider__arrow--next");
+    var idx = 0, timer = null, DELAY = 5000;
+
+    if (slides.length) {
+      slider.classList.add("is-ready");
+      var dots = slides.map(function (s, i) {
+        var b = doc.createElement("button");
+        b.type = "button";
+        b.setAttribute("aria-label", "Go to photo " + (i + 1));
+        b.addEventListener("click", function () { go(i); restart(); });
+        dotsWrap.appendChild(b);
+        return b;
+      });
+
+      var show = function (n) {
+        idx = (n + slides.length) % slides.length;
+        slides.forEach(function (s, i) { s.classList.toggle("is-active", i === idx); });
+        dots.forEach(function (d, i) { d.classList.toggle("is-active", i === idx); });
+      };
+      var go = show;
+      var nextFn = function () { show(idx + 1); };
+
+      if (prev) prev.addEventListener("click", function () { show(idx - 1); restart(); });
+      if (next) next.addEventListener("click", function () { show(idx + 1); restart(); });
+
+      var motionOk = !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+      var start = function () { if (motionOk && slides.length > 1) timer = setInterval(nextFn, DELAY); };
+      var stop = function () { if (timer) { clearInterval(timer); timer = null; } };
+      function restart() { stop(); start(); }
+
+      slider.addEventListener("mouseenter", stop);
+      slider.addEventListener("mouseleave", start);
+      slider.addEventListener("focusin", stop);
+      slider.addEventListener("focusout", start);
+      doc.addEventListener("visibilitychange", function () { doc.hidden ? stop() : start(); });
+
+      show(0);
+      start();
+    }
+  }
+
   /* --- Footer year --- */
   var y = doc.getElementById("year");
   if (y) y.textContent = new Date().getFullYear();
